@@ -1,6 +1,9 @@
 param (
+    [Parameter(Mandatory)]
     [ValidateNotNullOrEmpty()]
     [string]$ConfigurePreset,
+    [Parameter(Mandatory)]
+    [ValidateNotNullOrEmpty()]
     [string]$BuildPreset
 )
 

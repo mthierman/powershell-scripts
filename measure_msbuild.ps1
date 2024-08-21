@@ -1,14 +1,16 @@
 param (
+    [switch]$fresh,
+
     [ValidateNotNullOrEmpty()]
     $cCompiler = 'cl',
     [ValidateNotNullOrEmpty()]
     $cxxCompiler = 'cl',
+    [switch]$unityBuild,
+
     [ValidateNotNullOrEmpty()]
     [string]$target = 'ALL_BUILD',
     [ValidateNotNullOrEmpty()]
-    [string]$config = 'Debug',
-    [switch]$fresh,
-    [switch]$unityBuild
+    [string]$config = 'Debug'
 
 )
 

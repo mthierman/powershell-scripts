@@ -1,6 +1,7 @@
 param (
     [ValidateNotNullOrEmpty()]
     $cCompiler = 'cl',
+    [ValidateNotNullOrEmpty()]
     $cxxCompiler = 'cl',
     [ValidateNotNullOrEmpty()]
     [string]$target = 'all',

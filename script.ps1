@@ -9,7 +9,7 @@ function Get-Scripts
     [OutputType([Object[]])]
     param()
 
-    return Get-ChildItem -Path "scripts" -Filter "*.ps1" | Select-Object -ExpandProperty Name
+    Get-ChildItem -Path "scripts" -Filter "*.ps1" | Select-Object -ExpandProperty Name
 }
 
 $print_script_name = {

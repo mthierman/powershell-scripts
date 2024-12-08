@@ -24,7 +24,8 @@ $print_script_content = {
     Get-Content "scripts\$script" | ForEach-Object { "    $_" } | Write-Host -ForegroundColor Magenta
 }
 
-$invoke_script = {
+function Invoke-Script
+{
     if ($Command -eq "--ls")
     {
         $scripts = Get-Scripts
@@ -67,7 +68,7 @@ while ((Get-Location).Path -ne (Get-Location).Drive.Root)
 {
     if (Test-Path "scripts")
     {
-        &$invoke_script
+        Invoke-Script
         break
     }
     else

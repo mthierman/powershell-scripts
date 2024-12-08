@@ -24,11 +24,51 @@ $print_script_content = {
     Get-Content "scripts\$script" | ForEach-Object { "    $_" } | Write-Host -ForegroundColor Magenta
 }
 
+function Invoke-Script
+{
+    if ($Command -eq "--ls")
+    {
+        $scripts = Get-Scripts
+        foreach ($script in $scripts)
+        {
+            &$print_script_name($script)
+        }
+    }
+    elseif ($Command -eq "--cmd")
+    {
+        $scripts = Get-Scripts
+        foreach ($script in $scripts)
+        {
+            &$print_script_name($script)
+            &$print_script_content($script)
+            $current_index++
+            if ($current_index -lt $scripts.Count)
+            {
+                Write-Host "`n" -NoNewline
+            }
+        }
+    }
+    else
+    {
+        $path = ".\scripts\$Command.ps1"
+        if (Test-Path $path)
+        {
+            $script = Get-ChildItem $path
+            &$script
+        }
+        else
+        {
+            Write-Error "Script not found"
+        }
+    }
+}
+
 Push-Location
-while ((Get-Location) -ne $root)
+while ((Get-Location).Path -ne (Get-Location).Drive.Root)
 {
     if (Test-Path "scripts")
     {
+        Invoke-Script
         break
     }
     else
@@ -36,47 +76,8 @@ while ((Get-Location) -ne $root)
         Set-Location (Get-Item (Get-Location)).Parent
     }
 }
-if (Test-Path "scripts")
+if ((Get-Location).Path -eq (Get-Location).Drive.Root)
 {
-    Write-Host "scripts found"
-}
-else
-{
-    Write-Host "scripts not found"
-}
-if ($Command -eq "--ls")
-{
-    $scripts = Get-Scripts
-    foreach ($script in $scripts)
-    {
-        &$print_script_name($script)
-    }
-}
-elseif ($Command -eq "--cmd")
-{
-    $scripts = Get-Scripts
-    foreach ($script in $scripts)
-    {
-        &$print_script_name($script)
-        &$print_script_content($script)
-        $current_index++
-        if ($current_index -lt $scripts.Count)
-        {
-            Write-Host "`n" -NoNewline
-        }
-    }
-}
-else
-{
-    $path = ".\scripts\$Command.ps1"
-    if (Test-Path $path)
-    {
-        $script = Get-ChildItem $path
-        &$script
-    }
-    else
-    {
-        Write-Error "Script not found"
-    }
+    Write-Error "No scripts directory"
 }
 Pop-Location

@@ -24,6 +24,34 @@ $print_script_content = {
     Get-Content "scripts\$script" | ForEach-Object { "    $_" } | Write-Host -ForegroundColor Magenta
 }
 
+Push-Location
+
+$current_dir = Get-Location
+$root = $location.Drive.Root
+$parent = (Get-Item $current_dir).Parent
+$parent
+
+while ($current_dir -ne $root)
+{
+    if (Test-Path "scripts")
+    {
+        break
+    }
+    else
+    {
+        Set-Location (Get-Item $current_dir).Parent
+    }
+}
+
+# if (Test-Path "scripts")
+# {
+#     Write-Host "scripts found"
+# }
+# else
+# {
+#     Write-Host "scripts not found"
+# }
+
 if ($Command -eq "--ls")
 {
     $scripts = Get-Scripts
@@ -59,3 +87,5 @@ else
         Write-Error "Script not found"
     }
 }
+
+Pop-Location

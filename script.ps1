@@ -15,7 +15,7 @@ if ($cmd -eq "--list")
 
         if ($current_index -lt $script_count)
         {
-            Write-Host
+            Write-Host "`n" -NoNewline
         }
     }
 }

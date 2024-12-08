@@ -4,10 +4,6 @@ param (
     [string]$Function
 )
 
-Start-Job -ScriptBlock {
-    param([String]$function)
-
-    Import-Module -Name (Get-Item module).FullName -Verbose
-    $function.Length
-    &$function
-} -ArgumentList $Function | Wait-Job | Receive-Job
+Import-Module -Name (Get-Item "run.psm1").FullName -Verbose
+&$function
+Remove-Module -Name run

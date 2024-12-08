@@ -1,10 +1,24 @@
 param (
     [Parameter(Mandatory)]
     [ValidateNotNullOrEmpty()]
-    [string]$Name,
+    [string]$Script,
     [ValidateNotNullOrEmpty()]
     [string]$Folder
 )
+
+$get_scripts = {
+    param([bool]$custom_folder)
+    if ($custom_folder)
+    {
+        Write-Host "using $Folder..."
+        Get-ChildItem -Path $Folder -Filter "*.ps1" | Select-Object -ExpandProperty Name
+    }
+    else
+    {
+        Write-Host "using default scripts folder..."
+        Get-ChildItem -Path "scripts" -Filter "*.ps1" | Select-Object -ExpandProperty Name
+    }
+}
 
 $print_script_name = {
     param([String]$script)
@@ -17,6 +31,9 @@ $print_script_content = {
 }
 
 $print_commands = {
+    param([Object[]]$scripts)
+    $current_index = 0
+
     foreach ($script in $scripts)
     {
         $current_index++
@@ -25,26 +42,12 @@ $print_commands = {
 }
 
 $script_path = ".\scripts\$Name.ps1"
-if ($Folder)
-{
-    $scripts = Get-ChildItem -Path "scripts" -Filter "*.ps1" | Select-Object -ExpandProperty Name
-}
-else
-{
-    $scripts = Get-ChildItem -Path $Folder -Filter "*.ps1" | Select-Object -ExpandProperty Name
-}
+$scripts = & $get_scripts($PSBoundParameters.ContainsKey("Folder"))
 $script_count = $scripts.Count
-$current_index = 0
-
-if (!$cmd)
-{
-    Write-Error "Specify a script:"
-    & $print_commands
-}
 
 if ($cmd -eq "--ls")
 {
-    & $print_commands
+    & $print_commands($scripts)
 }
 
 if ($cmd -eq "--cmd")

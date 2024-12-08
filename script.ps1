@@ -25,13 +25,7 @@ $print_script_content = {
 }
 
 Push-Location
-
-$current_dir = Get-Location
-$root = $location.Drive.Root
-$parent = (Get-Item $current_dir).Parent
-$parent
-
-while ($current_dir -ne $root)
+while ((Get-Location) -ne $root)
 {
     if (Test-Path "scripts")
     {
@@ -39,19 +33,17 @@ while ($current_dir -ne $root)
     }
     else
     {
-        Set-Location (Get-Item $current_dir).Parent
+        Set-Location (Get-Item (Get-Location)).Parent
     }
 }
-
-# if (Test-Path "scripts")
-# {
-#     Write-Host "scripts found"
-# }
-# else
-# {
-#     Write-Host "scripts not found"
-# }
-
+if (Test-Path "scripts")
+{
+    Write-Host "scripts found"
+}
+else
+{
+    Write-Host "scripts not found"
+}
 if ($Command -eq "--ls")
 {
     $scripts = Get-Scripts
@@ -87,5 +79,4 @@ else
         Write-Error "Script not found"
     }
 }
-
 Pop-Location

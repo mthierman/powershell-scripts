@@ -1,28 +1,13 @@
 param (
     [Parameter(Mandatory)]
     [ValidateNotNullOrEmpty()]
-    [string]$mod_cmd
+    [string]$Function
 )
 
-function Import-CustomModule
-{
-    param([String]$cmd)
+Start-Job -ScriptBlock {
+    param([String]$function)
 
     Import-Module -Name (Get-Item module).FullName -Verbose
-    # $cmd.Length
-    # &$cmd
-    # $cmd
-    # Invoke-Expression $cmd
-}
-
-$command = Import-CustomModule $mod_cmd
-
-pwsh -nop -nol -noni -Command $command $mod_cmd
-
-# pwsh -nop -nol -noni -Command $module($Command)
-
-# pwsh -nop -nol -noni -Command {
-#     Import-Module -Name (Get-Item module).FullName
-#     $Command
-#     # Invoke-Expression $Command
-# }
+    $function.Length
+    &$function
+} -ArgumentList $Function | Wait-Job | Receive-Job

@@ -8,7 +8,7 @@ param (
 # $script_count = $scripts.Count
 # $current_index = 0
 
-$script_list = {
+$get_scripts = {
     Get-ChildItem -Path "scripts" -Filter "*.ps1" | Select-Object -ExpandProperty Name
 }
 
@@ -24,7 +24,9 @@ $print_script_content = {
 
 if ($Command -eq "--ls")
 {
-    foreach ($script in &$script_list)
+    $scripts = &$get_scripts
+
+    foreach ($script in $scripts)
     {
         &$print_script_name($script)
     }
@@ -32,7 +34,7 @@ if ($Command -eq "--ls")
 
 if ($Command -eq "--cmd")
 {
-    $scripts = &$script_list
+    $scripts = &$get_scripts
 
     foreach ($script in $scripts)
     {

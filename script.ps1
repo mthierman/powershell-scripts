@@ -12,13 +12,15 @@ function Get-Scripts
     Get-ChildItem -Path "scripts" -Filter "*.ps1" | Select-Object -ExpandProperty Name
 }
 
-$print_script_name = {
+function Write-ScriptName
+{
     param([String]$script)
 
     Write-Host "* $($script.Split(".ps1")[0])" -ForegroundColor Cyan
 }
 
-$print_script_content = {
+function Write-ScriptContent
+{
     param([String]$script)
 
     Get-Content "scripts\$script" | ForEach-Object { "    $_" } | Write-Host -ForegroundColor Magenta
@@ -31,7 +33,7 @@ function Invoke-Script
         $scripts = Get-Scripts
         foreach ($script in $scripts)
         {
-            &$print_script_name($script)
+            Write-ScriptName($script)
         }
     }
     elseif ($Command -eq "--cmd")
@@ -39,8 +41,8 @@ function Invoke-Script
         $scripts = Get-Scripts
         foreach ($script in $scripts)
         {
-            &$print_script_name($script)
-            &$print_script_content($script)
+            Write-ScriptName($script)
+            Write-ScriptContent($script)
             $current_index++
             if ($current_index -lt $scripts.Count)
             {

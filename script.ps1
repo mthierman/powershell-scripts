@@ -7,9 +7,9 @@ if ($cmd -eq "--list")
 
     foreach ($script in $scripts)
     {
-        "$($script.TrimEnd(".ps1")):"
-        Get-Content "scripts\$script"
-        "`n"
+        Write-Host "$($script.TrimEnd(".ps1")):" -ForegroundColor Green
+        Get-Content "scripts\$script" | ForEach-Object { "    $_" } | Write-Host -ForegroundColor Magenta
+        Write-Host "`n"
     }
 }
 

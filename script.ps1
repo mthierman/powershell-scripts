@@ -80,6 +80,6 @@ while ((Get-Location).Path -ne (Get-Location).Drive.Root)
 }
 if ((Get-Location).Path -eq (Get-Location).Drive.Root)
 {
-    Write-Error "No scripts directory"
+    Write-Error "Scripts not found"
 }
 Pop-Location

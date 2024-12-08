@@ -14,11 +14,13 @@ function Get-Scripts
 
 $print_script_name = {
     param([String]$script)
+
     Write-Host "* $($script.Split(".ps1")[0])" -ForegroundColor Cyan
 }
 
 $print_script_content = {
     param([String]$script)
+
     Get-Content "scripts\$script" | ForEach-Object { "    $_" } | Write-Host -ForegroundColor Magenta
 }
 

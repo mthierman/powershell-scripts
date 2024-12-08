@@ -9,7 +9,7 @@ if (!$cmd)
     Write-Error "Provide a script"
 }
 
-if ($cmd -eq "--list")
+if ($cmd -eq "--ls")
 {
     foreach ($script in $scripts)
     {

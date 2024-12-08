@@ -5,14 +5,15 @@ $script_count = $scripts.Count
 $current_index = 0
 
 $print_script_name = {
-    Write-Host "* $($script.TrimEnd(".ps1")):" -ForegroundColor Cyan
+    param([String]$script_name)
+    Write-Host "* $($script_name.Split(".ps1")[0]):" -ForegroundColor Cyan
 }
 
 $print_commands = {
     foreach ($script in $scripts)
     {
         $current_index++
-        & $print_script_name
+        & $print_script_name($script)
     }
 }
 
@@ -32,7 +33,7 @@ if ($cmd -eq "--cmd")
     foreach ($script in $scripts)
     {
         $current_index++
-        & $print_script_name
+        & $print_script_name($script)
         Get-Content "scripts\$script" | ForEach-Object { "    $_" } | Write-Host -ForegroundColor Magenta
 
         if ($current_index -lt $script_count)

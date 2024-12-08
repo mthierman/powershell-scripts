@@ -8,14 +8,13 @@ param (
 
 $get_scripts = {
     param([bool]$custom_folder)
+
     if ($custom_folder)
     {
-        Write-Host "using $Folder..."
         Get-ChildItem -Path $Folder -Filter "*.ps1" | Select-Object -ExpandProperty Name
     }
     else
     {
-        Write-Host "using default scripts folder..."
         Get-ChildItem -Path "scripts" -Filter "*.ps1" | Select-Object -ExpandProperty Name
     }
 }

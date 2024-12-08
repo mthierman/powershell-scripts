@@ -4,12 +4,12 @@ param (
     [string]$Command
 )
 
-# $script_path = ".\scripts\$Script.ps1"
-# $script_count = $scripts.Count
-# $current_index = 0
+function Get-Scripts
+{
+    [OutputType([Object[]])]
+    param()
 
-$get_scripts = {
-    Get-ChildItem -Path "scripts" -Filter "*.ps1" | Select-Object -ExpandProperty Name
+    return Get-ChildItem -Path "scripts" -Filter "*.ps1" | Select-Object -ExpandProperty Name
 }
 
 $print_script_name = {
@@ -24,8 +24,7 @@ $print_script_content = {
 
 if ($Command -eq "--ls")
 {
-    $scripts = &$get_scripts
-
+    $scripts = Get-Scripts
     foreach ($script in $scripts)
     {
         &$print_script_name($script)
@@ -34,14 +33,12 @@ if ($Command -eq "--ls")
 
 if ($Command -eq "--cmd")
 {
-    $scripts = &$get_scripts
-
+    $scripts = Get-Scripts
     foreach ($script in $scripts)
     {
-        $current_index++
         &$print_script_name($script)
         &$print_script_content($script)
-
+        $current_index++
         if ($current_index -lt $scripts.Count)
         {
             Write-Host "`n" -NoNewline
@@ -49,7 +46,11 @@ if ($Command -eq "--cmd")
     }
 }
 
-# if (Test-Path $script_path)
-# {
-#     & $script_path
-# }
+if (Test-Path ".\scripts\$Script.ps1")
+{
+    &$script_path
+}
+else
+{
+    Write-Error "Script not found"
+}

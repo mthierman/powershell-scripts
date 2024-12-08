@@ -4,18 +4,27 @@ $scripts = Get-ChildItem -Path "scripts" -Filter "*.ps1" | Select-Object -Expand
 $script_count = $scripts.Count
 $current_index = 0
 
+$print_script_name = {
+    Write-Host "* $($script.TrimEnd(".ps1")):" -ForegroundColor Cyan
+}
+
+$print_commands = {
+    foreach ($script in $scripts)
+    {
+        $current_index++
+        & $print_script_name
+    }
+}
+
 if (!$cmd)
 {
-    Write-Error "Provide a script"
+    Write-Error "Specify a script:"
+    & $print_commands
 }
 
 if ($cmd -eq "--ls")
 {
-    foreach ($script in $scripts)
-    {
-        $current_index++
-        Write-Host "* $($script.TrimEnd(".ps1"))" -ForegroundColor Green
-    }
+    & $print_commands
 }
 
 if ($cmd -eq "--cmd")
@@ -23,7 +32,7 @@ if ($cmd -eq "--cmd")
     foreach ($script in $scripts)
     {
         $current_index++
-        Write-Host "* $($script.TrimEnd(".ps1")):" -ForegroundColor Green
+        & $print_script_name
         Get-Content "scripts\$script" | ForEach-Object { "    $_" } | Write-Host -ForegroundColor Magenta
 
         if ($current_index -lt $script_count)

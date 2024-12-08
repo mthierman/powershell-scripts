@@ -30,8 +30,7 @@ if ($Command -eq "--ls")
         &$print_script_name($script)
     }
 }
-
-if ($Command -eq "--cmd")
+elseif ($Command -eq "--cmd")
 {
     $scripts = Get-Scripts
     foreach ($script in $scripts)
@@ -45,12 +44,16 @@ if ($Command -eq "--cmd")
         }
     }
 }
-
-if (Test-Path ".\scripts\$Script.ps1")
-{
-    &$script_path
-}
 else
 {
-    Write-Error "Script not found"
+    $path = ".\scripts\$Command.ps1"
+    if (Test-Path $path)
+    {
+        $script = Get-ChildItem $path
+        &$script
+    }
+    else
+    {
+        Write-Error "Script not found"
+    }
 }

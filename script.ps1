@@ -5,10 +5,10 @@ if ($cmd -eq "--list")
 {
     $scripts = Get-ChildItem -Path "scripts" -Filter "*.ps1" | Select-Object -ExpandProperty Name
 
-    foreach ($item in $scripts)
+    foreach ($script in $scripts)
     {
-        "$($item.TrimEnd(".ps1")):"
-        Get-Content "scripts\$item"
+        "$($script.TrimEnd(".ps1")):"
+        Get-Content "scripts\$script"
         "`n"
     }
 }

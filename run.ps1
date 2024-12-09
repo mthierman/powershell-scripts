@@ -30,9 +30,9 @@ try
 
         if ($Command -eq "--ls")
         {
-            foreach ($command in $commands.Keys)
+            foreach ($key in $commands.Keys)
             {
-                Write-Host "* $command" -ForegroundColor Cyan
+                Write-Host "* $key" -ForegroundColor Cyan
             }
         }
         elseif ($Command -eq "--cmd")

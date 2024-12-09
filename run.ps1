@@ -11,7 +11,7 @@ $ErrorActionPreference = 'Stop'
 
 while ((Get-Location).Path -ne (Get-Location).Drive.Root)
 {
-    if (Test-Path "run.psm1")
+    if (Test-Path "run.ps1")
     {
         break
     }
@@ -23,36 +23,31 @@ while ((Get-Location).Path -ne (Get-Location).Drive.Root)
 
 try
 {
-    Import-Module -Name (Get-Item "run.psm1").FullName
+    [System.Collections.Specialized.OrderedDictionary]$entries = .\run.ps1
+
     try
     {
-        [System.Collections.Specialized.OrderedDictionary]$commands = & run\Export-Commands
-
         if ($Command -eq "--ls")
         {
-            foreach ($key in $commands.Keys)
+            foreach ($key in $entries.Keys)
             {
                 Write-Host "* $key" -ForegroundColor Cyan
             }
         }
         elseif ($Command -eq "--cmd")
         {
-            foreach ($key in $commands.Keys)
+            foreach ($key in $entries.Keys)
             {
                 Write-Host "* $key" -ForegroundColor Cyan
-                Write-Host $commands[$key] -ForegroundColor Magenta
+                Write-Host $entries[$key] -ForegroundColor Magenta
             }
         }
         else
         {
-            & $commands.$Command
+            &$entries.$Command
         }
     }
     catch { Write-Host "Command not found" -ForegroundColor "Red" }
-    finally
-    {
-        Remove-Module -Name run
-    }
 }
 catch { Write-Host "Run module not found" -ForegroundColor "Red" }
 finally

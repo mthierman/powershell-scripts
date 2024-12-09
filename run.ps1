@@ -4,6 +4,14 @@ param (
     [string]$Command
 )
 
+function Read-Config
+{
+    [OutputType([hashtable])]
+    param([String]$config_file)
+
+    Import-PowerShellDataFile $config_file -SkipLimitCheck
+}
+
 Push-Location
 $PreviousErrorActionPreference = $ErrorActionPreference
 $ErrorActionPreference = 'Stop'

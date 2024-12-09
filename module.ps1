@@ -4,11 +4,12 @@ param (
     [string]$Command
 )
 
-function Invoke-ModuleCommand
-{
-    $PreviousErrorActionPreference = $ErrorActionPreference
-    $ErrorActionPreference = 'Stop'
+$PreviousErrorActionPreference = $ErrorActionPreference
+$ErrorActionPreference = 'Stop'
 
+try
+{
+    Import-Module -Name (Get-Item "run.psm1").FullName
     try
     {
         Get-Command $Command | Out-Null
@@ -18,9 +19,8 @@ function Invoke-ModuleCommand
     finally
     {
         $ErrorActionPreference = $PreviousErrorActionPreference
+        Remove-Module -Name run
     }
 }
+catch {}
 
-Import-Module -Name (Get-Item "run.psm1").FullName
-Invoke-ModuleCommand
-Remove-Module -Name run

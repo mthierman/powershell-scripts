@@ -45,8 +45,8 @@ try
         }
         else
         {
-            Get-Command "runner.$Command" | Out-Null
-            &"runner.$Command"
+            Get-Command "$prefix$Command" | Out-Null
+            &"$prefix$Command"
         }
     }
     catch { Write-Host "Command not found" -ForegroundColor "Red" }

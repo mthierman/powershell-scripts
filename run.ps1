@@ -21,37 +21,27 @@ while ((Get-Location).Path -ne (Get-Location).Drive.Root)
     }
 }
 
-try
-{
-    [System.Collections.Specialized.OrderedDictionary]$entries = .\run.ps1
+[System.Collections.Specialized.OrderedDictionary]$entries = .\run.ps1
 
-    try
-    {
-        if ($Command -eq "--ls")
-        {
-            foreach ($key in $entries.Keys)
-            {
-                Write-Host "* $key" -ForegroundColor Cyan
-            }
-        }
-        elseif ($Command -eq "--cmd")
-        {
-            foreach ($key in $entries.Keys)
-            {
-                Write-Host "* $key" -ForegroundColor Cyan
-                Write-Host $entries[$key] -ForegroundColor Magenta
-            }
-        }
-        else
-        {
-            &$entries.$Command
-        }
-    }
-    catch { Write-Host "Command not found" -ForegroundColor "Red" }
-}
-catch { Write-Host "Run module not found" -ForegroundColor "Red" }
-finally
+if ($Command -eq "--ls")
 {
-    $ErrorActionPreference = $PreviousErrorActionPreference
-    Pop-Location 
+    foreach ($key in $entries.Keys)
+    {
+        Write-Host "* $key" -ForegroundColor Cyan
+    }
 }
+elseif ($Command -eq "--cmd")
+{
+    foreach ($key in $entries.Keys)
+    {
+        Write-Host "* $key" -ForegroundColor Cyan
+        Write-Host $entries[$key] -ForegroundColor Magenta
+    }
+}
+else
+{
+    &$entries.$Command
+}
+
+$ErrorActionPreference = $PreviousErrorActionPreference
+Pop-Location 

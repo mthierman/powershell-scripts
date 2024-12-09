@@ -1,9 +1,24 @@
 param (
     [Parameter(Mandatory)]
     [ValidateNotNullOrEmpty()]
-    [string]$Function
+    [string]$Command
 )
 
-Import-Module -Name (Get-Item "run.psm1").FullName -Verbose
-&$function
+function Invoke-ModuleCommand
+{
+    $PreviousErrorActionPreference = $ErrorActionPreference
+    $ErrorActionPreference = 'Stop'
+
+    try
+    {
+        Get-Command $Command | Out-Null
+        &$Command
+    }
+    catch { Write-Host "Command not found" -ForegroundColor "Red" }
+
+    $ErrorActionPreference = $PreviousErrorActionPreference
+}
+
+Import-Module -Name (Get-Item "run.psm1").FullName
+Invoke-ModuleCommand
 Remove-Module -Name run

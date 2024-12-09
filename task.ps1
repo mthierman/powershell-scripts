@@ -15,7 +15,7 @@ while ((Get-Location).Path -ne (Get-Location).Drive.Root)
     if (Test-Path $module_file)
     {
         $module = Import-Module -Name (Get-Item $module_file).FullName -Function Export-Task -PassThru
-        [System.Collections.Specialized.OrderedDictionary]$Commands = &task\Export-Task
+        [System.Collections.Specialized.OrderedDictionary]$Commands = &"$($module.Name)\$($module.ExportedCommands.Keys)"
 
         if ($Command -eq "--ls")
         {

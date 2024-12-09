@@ -9,13 +9,19 @@ $ErrorActionPreference = 'Stop'
 
 try
 {
-    $module = Import-Module -Name (Get-Item "run.psm1").FullName
-    # $module.ExportedCommands
+    Import-Module -Name (Get-Item "run.psm1").FullName
     try
     {
         if ($Command -eq "--ls")
         {
-            # Get-Module run | ForEach-Object { Write-Host $_.ExportedCommands.Values.Name -ForegroundColor "Cyan" }
+            $commands = (Get-Module run).ExportedCommands.Values.Name
+            foreach ($command in $commands)
+            {
+                Write-Host "* $command" -ForegroundColor Cyan
+            }
+        }
+        elseif ($Command -eq "--cmd")
+        {
             $commands = (Get-Module run).ExportedCommands.Values.Name
             foreach ($command in $commands)
             {

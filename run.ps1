@@ -7,6 +7,7 @@ param (
 Push-Location
 $PreviousErrorActionPreference = $ErrorActionPreference
 $ErrorActionPreference = 'Stop'
+$prefix = 'run.'
 
 while ((Get-Location).Path -ne (Get-Location).Drive.Root)
 {
@@ -22,7 +23,7 @@ while ((Get-Location).Path -ne (Get-Location).Drive.Root)
 
 try
 {
-    Import-Module -Name (Get-Item "run.psm1").FullName -Prefix runner.
+    Import-Module -Name (Get-Item "run.psm1").FullName -Prefix $prefix
     try
     {
         if ($Command -eq "--ls")
@@ -39,7 +40,7 @@ try
             foreach ($command in $commands)
             {
                 Write-Host "* $command" -ForegroundColor Cyan
-                Write-Host (Get-Command "runner.$command").Definition -ForegroundColor Magenta
+                Write-Host (Get-Command "$prefix$command").Definition -ForegroundColor Magenta
             }
         }
         else

@@ -18,9 +18,8 @@ try
     catch { Write-Host "Command not found" -ForegroundColor "Red" }
     finally
     {
-        $ErrorActionPreference = $PreviousErrorActionPreference
         Remove-Module -Name run
     }
 }
 catch {}
-
+finally { $ErrorActionPreference = $PreviousErrorActionPreference }

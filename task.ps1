@@ -4,7 +4,7 @@ param (
     [string]$Command
 )
 
-$filename = "tasks.psm1"
+$filename = "task.psm1"
 
 Push-Location
 $PreviousErrorActionPreference = $ErrorActionPreference
@@ -14,8 +14,8 @@ while ((Get-Location).Path -ne (Get-Location).Drive.Root)
 {
     if (Test-Path $filename)
     {
-        Import-Module -Name (Get-Item $filename).FullName
-        [System.Collections.Specialized.OrderedDictionary]$Commands = &tasks\Export-Tasks
+        $module = Import-Module -Name (Get-Item $filename).FullName -Function Export-Task -PassThru
+        [System.Collections.Specialized.OrderedDictionary]$Commands = &task\Export-Task
 
         if ($Command -eq "--ls")
         {
@@ -37,7 +37,7 @@ while ((Get-Location).Path -ne (Get-Location).Drive.Root)
             &$Commands.$Command
         }
 
-        Remove-Module -Name tasks
+        Remove-Module $module
         break
     }
     else

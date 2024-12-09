@@ -20,6 +20,7 @@ try
             foreach ($command in $commands)
             {
                 Write-Host "* $command" -ForegroundColor Cyan
+                Write-Host (Get-Command $command).Definition -ForegroundColor Magenta
             }
         }
         else

@@ -4,18 +4,10 @@ param (
     [string]$Command
 )
 
-function Read-Config
-{
-    [OutputType([hashtable])]
-    param([String]$config_file)
-
-    Import-PowerShellDataFile $config_file -SkipLimitCheck
-}
-
 Push-Location
+
 $PreviousErrorActionPreference = $ErrorActionPreference
 $ErrorActionPreference = 'Stop'
-$prefix = "run."
 
 while ((Get-Location).Path -ne (Get-Location).Drive.Root)
 {
@@ -31,29 +23,29 @@ while ((Get-Location).Path -ne (Get-Location).Drive.Root)
 
 try
 {
-    Import-Module -Name (Get-Item "run.psm1").FullName -Prefix $prefix
+    Import-Module -Name (Get-Item "run.psm1").FullName
     try
     {
+        [System.Collections.Specialized.OrderedDictionary]$commands = & run\Export-Commands
+
         if ($Command -eq "--ls")
         {
-            $commands = (Get-Module run).ExportedCommands.Values.Name
-            foreach ($command in $commands)
+            foreach ($command in $commands.Keys)
             {
                 Write-Host "* $command" -ForegroundColor Cyan
             }
         }
         elseif ($Command -eq "--cmd")
         {
-            $commands = (Get-Module run).ExportedCommands.Values.Name
-            foreach ($command in $commands)
+            foreach ($key in $commands.Keys)
             {
-                Write-Host "* $command" -ForegroundColor Cyan
-                Write-Host (Get-Command $prefix$command).Definition -ForegroundColor Magenta
+                Write-Host "* $key" -ForegroundColor Cyan
+                Write-Host $commands[$key] -ForegroundColor Magenta
             }
         }
         else
         {
-            &"run\$prefix$Command"
+            & $commands.$Command
         }
     }
     catch { Write-Host "Command not found" -ForegroundColor "Red" }

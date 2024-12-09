@@ -7,8 +7,6 @@ param (
 $module_file = "task.psm1"
 
 Push-Location
-$PreviousErrorActionPreference = $ErrorActionPreference
-$ErrorActionPreference = 'Stop'
 
 while ((Get-Location).Path -ne (Get-Location).Drive.Root)
 {
@@ -46,5 +44,4 @@ while ((Get-Location).Path -ne (Get-Location).Drive.Root)
     }
 }
 
-$ErrorActionPreference = $PreviousErrorActionPreference
 Pop-Location

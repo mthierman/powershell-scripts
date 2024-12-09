@@ -12,29 +12,35 @@ while ((Get-Location).Path -ne (Get-Location).Drive.Root)
 {
     if (Test-Path "run.psm1")
     {
-        Import-Module -Name (Get-Item "run.psm1").FullName
-        [System.Collections.Specialized.OrderedDictionary]$Commands = &run\Export-Commands
+        try
+        {
+            Import-Module -Name (Get-Item "run.psm1").FullName
+            [System.Collections.Specialized.OrderedDictionary]$Commands = &run\Export-Commands
 
-        if ($Command -eq "--ls")
-        {
-            foreach ($key in $Commands.Keys)
+            if ($Command -eq "--ls")
             {
-                Write-Host "* $key" -ForegroundColor Cyan
+                foreach ($key in $Commands.Keys)
+                {
+                    Write-Host "* $key" -ForegroundColor Cyan
+                }
+            }
+            elseif ($Command -eq "--cmd")
+            {
+                foreach ($key in $Commands.Keys)
+                {
+                    Write-Host "* $key" -ForegroundColor Cyan
+                    Write-Host $Commands[$key] -ForegroundColor Magenta
+                }
+            }
+            else
+            {
+                &$Commands.$Command
             }
         }
-        elseif ($Command -eq "--cmd")
+        finally
         {
-            foreach ($key in $Commands.Keys)
-            {
-                Write-Host "* $key" -ForegroundColor Cyan
-                Write-Host $Commands[$key] -ForegroundColor Magenta
-            }
+            Remove-Module -Name run
         }
-        else
-        {
-            &$Commands.$Command
-        }
-        Remove-Module -Name run
         break
     }
     else

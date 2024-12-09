@@ -7,39 +7,57 @@ param (
 $PreviousErrorActionPreference = $ErrorActionPreference
 $ErrorActionPreference = 'Stop'
 
-try
+function Invoke-ModuleCommand
 {
-    Import-Module -Name (Get-Item "run.psm1").FullName -Prefix runner.
     try
     {
-        if ($Command -eq "--ls")
+        Import-Module -Name (Get-Item "run.psm1").FullName -Prefix runner.
+        try
         {
-            $commands = (Get-Module run).ExportedCommands.Values.Name
-            foreach ($command in $commands)
+            if ($Command -eq "--ls")
             {
-                Write-Host "* $command" -ForegroundColor Cyan
+                $commands = (Get-Module run).ExportedCommands.Values.Name
+                foreach ($command in $commands)
+                {
+                    Write-Host "* $command" -ForegroundColor Cyan
+                }
+            }
+            elseif ($Command -eq "--cmd")
+            {
+                $commands = (Get-Module run).ExportedCommands.Values.Name
+                foreach ($command in $commands)
+                {
+                    Write-Host "* $command" -ForegroundColor Cyan
+                    Write-Host (Get-Command "runner.$command").Definition -ForegroundColor Magenta
+                }
+            }
+            else
+            {
+                Get-Command "runner.$Command" | Out-Null
+                &"runner.$Command"
             }
         }
-        elseif ($Command -eq "--cmd")
+        catch { Write-Host "Command not found" -ForegroundColor "Red" }
+        finally
         {
-            $commands = (Get-Module run).ExportedCommands.Values.Name
-            foreach ($command in $commands)
-            {
-                Write-Host "* $command" -ForegroundColor Cyan
-                Write-Host (Get-Command "runner.$command").Definition -ForegroundColor Magenta
-            }
-        }
-        else
-        {
-            Get-Command "runner.$Command" | Out-Null
-            &"runner.$Command"
+            Remove-Module -Name run
         }
     }
-    catch { Write-Host "Command not found" -ForegroundColor "Red" }
-    finally
+    catch { Write-Host "Run module not found" -ForegroundColor "Red" }
+    finally { $ErrorActionPreference = $PreviousErrorActionPreference }
+}
+
+Push-Location
+while ((Get-Location).Path -ne (Get-Location).Drive.Root)
+{
+    if (Test-Path "run.psm1")
     {
-        Remove-Module -Name run
+        break
+    }
+    else
+    {
+        Set-Location (Get-Item (Get-Location)).Parent
     }
 }
-catch { Write-Host "Run module not found" -ForegroundColor "Red" }
-finally { $ErrorActionPreference = $PreviousErrorActionPreference }
+Invoke-ModuleCommand
+Pop-Location

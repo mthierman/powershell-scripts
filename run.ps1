@@ -9,7 +9,7 @@ $ErrorActionPreference = 'Stop'
 
 try
 {
-    Import-Module -Name (Get-Item "run.psm1").FullName
+    Import-Module -Name (Get-Item "run.psm1").FullName -Prefix runner.
     try
     {
         if ($Command -eq "--ls")
@@ -26,13 +26,13 @@ try
             foreach ($command in $commands)
             {
                 Write-Host "* $command" -ForegroundColor Cyan
-                Write-Host (Get-Command $command).Definition -ForegroundColor Magenta
+                Write-Host (Get-Command "runner.$command").Definition -ForegroundColor Magenta
             }
         }
         else
         {
-            Get-Command $Command | Out-Null
-            &$Command   
+            Get-Command "runner.$Command" | Out-Null
+            &"runner.$Command"
         }
     }
     catch { Write-Host "Command not found" -ForegroundColor "Red" }

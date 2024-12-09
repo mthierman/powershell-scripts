@@ -15,8 +15,10 @@ function Invoke-ModuleCommand
         &$Command
     }
     catch { Write-Host "Command not found" -ForegroundColor "Red" }
-
-    $ErrorActionPreference = $PreviousErrorActionPreference
+    finally
+    {
+        $ErrorActionPreference = $PreviousErrorActionPreference
+    }
 }
 
 Import-Module -Name (Get-Item "run.psm1").FullName

@@ -21,5 +21,5 @@ try
         Remove-Module -Name run
     }
 }
-catch {}
+catch { Write-Host "Run module not found" -ForegroundColor "Red" }
 finally { $ErrorActionPreference = $PreviousErrorActionPreference }

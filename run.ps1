@@ -5,14 +5,36 @@ param (
 )
 
 Push-Location
-
 $PreviousErrorActionPreference = $ErrorActionPreference
 $ErrorActionPreference = 'Stop'
 
 while ((Get-Location).Path -ne (Get-Location).Drive.Root)
 {
-    if (Test-Path "run.ps1")
+    if (Test-Path "run.psm1")
     {
+        Import-Module -Name (Get-Item "run.psm1").FullName
+        [System.Collections.Specialized.OrderedDictionary]$Commands = &run\Export-Commands
+
+        if ($Command -eq "--ls")
+        {
+            foreach ($key in $Commands.Keys)
+            {
+                Write-Host "* $key" -ForegroundColor Cyan
+            }
+        }
+        elseif ($Command -eq "--cmd")
+        {
+            foreach ($key in $Commands.Keys)
+            {
+                Write-Host "* $key" -ForegroundColor Cyan
+                Write-Host $Commands[$key] -ForegroundColor Magenta
+            }
+        }
+        else
+        {
+            &$Commands.$Command
+        }
+        Remove-Module -Name run
         break
     }
     else
@@ -21,27 +43,5 @@ while ((Get-Location).Path -ne (Get-Location).Drive.Root)
     }
 }
 
-[System.Collections.Specialized.OrderedDictionary]$entries = .\run.ps1
-
-if ($Command -eq "--ls")
-{
-    foreach ($key in $entries.Keys)
-    {
-        Write-Host "* $key" -ForegroundColor Cyan
-    }
-}
-elseif ($Command -eq "--cmd")
-{
-    foreach ($key in $entries.Keys)
-    {
-        Write-Host "* $key" -ForegroundColor Cyan
-        Write-Host $entries[$key] -ForegroundColor Magenta
-    }
-}
-else
-{
-    &$entries.$Command
-}
-
 $ErrorActionPreference = $PreviousErrorActionPreference
-Pop-Location 
+Pop-Location

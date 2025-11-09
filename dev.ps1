@@ -5,5 +5,6 @@ param (
     [string]$HostArch = 'amd64'
 )
 
-$vspath = "C:\Program Files\Microsoft Visual Studio\18\Insiders"
+$vswhere = "${env:ProgramFiles(x86)}\Microsoft Visual Studio\Installer\vswhere.exe"
+$vspath = & $vswhere -products * -latest -property installationPath
 & "$vspath\Common7\Tools\Launch-VsDevShell.ps1" -Arch $Arch -HostArch $HostArch -SkipAutomaticLocation

@@ -5,4 +5,7 @@ param (
     [string]$HostArch = 'amd64'
 )
 
-& $(Join-Path -Path $(vswhere -latest -products * -property installationPath) -ChildPath "Common7\Tools\Launch-VsDevShell.ps1") -Arch $Arch -HostArch $HostArch -SkipAutomaticLocation
+& $(Join-Path -Path $(vswhere -latest -products * -property installationPath) -ChildPath "Common7\Tools\Launch-VsDevShell.ps1") `
+    -Arch $Arch `
+    -HostArch $HostArch `
+    -SkipAutomaticLocation

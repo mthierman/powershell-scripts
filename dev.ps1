@@ -5,5 +5,4 @@ param (
     [string]$HostArch = 'amd64'
 )
 
-$vspath = & vswhere -products * -latest -property installationPath
-& "$vspath\Common7\Tools\Launch-VsDevShell.ps1" -Arch $Arch -HostArch $HostArch -SkipAutomaticLocation
+& "$(vswhere -latest -property installationPath)\Common7\Tools\Launch-VsDevShell.ps1" -Arch $Arch -HostArch $HostArch -SkipAutomaticLocation

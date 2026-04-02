@@ -27,9 +27,10 @@ while (-not (Test-NetConnection -ComputerName localhost -Port $port).TcpTestSucc
 pi
 "@
 
-wt new-tab --startingDirectory "$cwd" `
+wt --focus --maximized new-tab --startingDirectory "$cwd" `
     powershell -NoExit -Command "& { $serverCmd }" `
     `; split-pane -H --startingDirectory "$cwd" `
     powershell -NoExit -Command "codex" `
+    `; move-focus left `
     `; split-pane -V --startingDirectory "$cwd" `
     powershell -NoExit -Command "& { $piCmd }"

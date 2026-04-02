@@ -27,7 +27,6 @@ while (-not (Test-NetConnection -ComputerName localhost -Port $port).TcpTestSucc
 pi
 "@
 
-# IMPORTANT: everything stays inside ONE wt invocation
 wt new-tab --startingDirectory "$cwd" `
     powershell -NoExit -Command "& { $serverCmd }" `
     `; split-pane -H --startingDirectory "$cwd" `

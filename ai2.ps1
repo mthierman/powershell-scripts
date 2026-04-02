@@ -8,6 +8,12 @@ $models = @{
     gemma3 = "C:\Users\mthie\.lmstudio\models\lmstudio-community\gemma-3-4b-it-GGUF\gemma-3-4b-it-Q4_K_M.gguf"
 }
 
+if (-not $models.ContainsKey($Model))
+{
+    Write-Host "Unknown model: $Model"
+    exit 1
+}
+
 $modelPath = $models[$Model]
 $port = 8080
 $cwd = (Get-Location).Path

@@ -1,9 +1,11 @@
 param(
-    [string]$Model = "qwen"
+    [string]$Model = "qwen4b"
 )
 
 $models = @{
-    qwen = "C:\Users\mthie\.lmstudio\models\lmstudio-community\Qwen3.5-4B-GGUF\Qwen3.5-4B-Q4_K_M.gguf"
+    qwen4b = "C:\Users\mthie\.lmstudio\models\lmstudio-community\Qwen3.5-4B-GGUF\Qwen3.5-4B-Q4_K_M.gguf"
+    qwen9b = "C:\Users\mthie\.lmstudio\models\lmstudio-community\Qwen3.5-9B-GGUF\Qwen3.5-9B-Q4_K_M.gguf"
+    gemma3 = "C:\Users\mthie\.lmstudio\models\lmstudio-community\gemma-3-4b-it-GGUF\gemma-3-4b-it-Q4_K_M.gguf"
 }
 
 $modelPath = $models[$Model]

@@ -1,5 +1,5 @@
 param(
-    [string]$Model = "qwen4b"
+    [string]$Model = "gemma3"
 )
 
 $models = @{

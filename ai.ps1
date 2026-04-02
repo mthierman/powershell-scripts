@@ -30,5 +30,5 @@ pi
 wt --focus --maximized `
     new-tab --title "server:$Model" --startingDirectory "$cwd" `
     powershell -NoExit -Command "& { $serverCmd }" `; `
-    split-pane -V --title "pi:$Model" --startingDirectory "$cwd" `
+    split-pane -H --title "pi:$Model" --startingDirectory "$cwd" `
     powershell -NoExit -Command "& { $clientCmd }"

@@ -1,5 +1,5 @@
 param(
-    [string]$Model = "gemma4e2b"
+    [string]$Model = "qwen354b"
 )
 
 $port = 8080

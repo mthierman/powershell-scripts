@@ -24,13 +24,21 @@ $modelName = [System.IO.Path]::GetFileNameWithoutExtension($modelFile)
 $piModel = "llama-cpp/$modelName"
 
 # -----------------------------
-# Gemma 4 canonical parameters (server-side)
+# server arguments (NO STRING COMMANDS)
 # -----------------------------
-$serverCmd =
-"llama-server --model `"$modelPath`" --port $port --ctx-size 32768 --gpu-layers 999 --temperature 1.0 --top-p 0.95 --top-k 64 --repeat-penalty 1.0"
+$serverArgs = @(
+    "--model", $modelPath
+    "--port", $port
+    "--ctx-size", "32768"
+    "--gpu-layers", "999"
+    "--temperature", "1.0"
+    "--top-p", "0.95"
+    "--top-k", "64"
+    "--repeat-penalty", "1.0"
+)
 
 # -----------------------------
-# client wait loop
+# client wait loop (fixed quoting)
 # -----------------------------
 $clientCmd = @"
 while (-not (Test-NetConnection localhost -Port $port).TcpTestSucceeded) {
@@ -39,12 +47,15 @@ while (-not (Test-NetConnection localhost -Port $port).TcpTestSucceeded) {
 pi --model $piModel
 "@
 
+# escape for wt (must be single string-safe)
+$escapedClient = $clientCmd.Replace('"', '\"')
+
 # -----------------------------
-# Windows Terminal split
+# Windows Terminal layout
 # -----------------------------
 wt --focus --maximized `
     new-tab --title "gemma4-server" --startingDirectory "$cwd" `
-    powershell -NoExit -Command "$serverCmd" `
+    powershell -NoExit -Command "& llama-server $($serverArgs -join ' ')" `
     `; `
     split-pane -H --title "pi-client" --startingDirectory "$cwd" `
-    powershell -NoExit -Command "$clientCmd"
+    powershell -NoExit -Command "$escapedClient"

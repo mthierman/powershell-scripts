@@ -34,6 +34,7 @@ $serverArgs = @(
     "--temperature", "1.0"
     "--top-p", "0.95"
     "--top-k", "64"
+    "--chat-template-kwargs", '{"enable_thinking":true}'
 )
 
 # -----------------------------

@@ -17,14 +17,14 @@ $cwd = (Get-Location).Path
 $modelPath = $models[$Model]
 
 # -----------------------------
-# derive pi model from filename
+# derive model name
 # -----------------------------
 $modelFile = Split-Path $modelPath -Leaf
 $modelName = [System.IO.Path]::GetFileNameWithoutExtension($modelFile)
 $piModel = "llama-cpp/$modelName"
 
 # -----------------------------
-# server arguments (NO STRING COMMANDS)
+# server arguments (safe splatting)
 # -----------------------------
 $serverArgs = @(
     "--model", $modelPath,
@@ -38,10 +38,10 @@ $serverArgs = @(
 )
 
 # -----------------------------
-# client wait loop (fixed quoting)
+# lightweight port wait loop
 # -----------------------------
 $clientCmd = @"
-while (-not (Test-NetConnection localhost -Port $port).TcpTestSucceeded) {
+while (-not (Get-NetTCPConnection -LocalPort $port -ErrorAction SilentlyContinue)) {
     Start-Sleep -Milliseconds 200
 }
 pi --model $piModel
@@ -52,7 +52,7 @@ pi --model $piModel
 # -----------------------------
 wt --focus --maximized `
     new-tab --title "gemma4-server" --startingDirectory "$cwd" `
-    powershell -NoExit -Command "& llama-server @serverArgs" `
+    powershell -NoExit -Command "& { llama-server @serverArgs }" `
     `; `
     split-pane -H --title "pi-client" --startingDirectory "$cwd" `
-    powershell -NoExit -Command $clientCmd
+    powershell -NoExit -Command "& { $clientCmd }"

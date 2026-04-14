@@ -46,9 +46,6 @@ while (-not (Test-NetConnection -ComputerName localhost -Port $port -Information
 pi --model $piModel
 "@
 
-# escape for wt (must be single string-safe)
-$escapedClient = $clientCmd.Replace('"', '\"')
-
 # -----------------------------
 # Windows Terminal layout
 # -----------------------------
@@ -57,4 +54,4 @@ wt --focus --maximized `
     powershell -NoExit -Command "& llama-server $($serverArgs -join ' ')" `
     `; `
     split-pane -H --title "pi-client" --startingDirectory "$cwd" `
-    powershell -NoExit -Command "$escapedClient"
+    powershell -NoExit -Command "$clientCmd"

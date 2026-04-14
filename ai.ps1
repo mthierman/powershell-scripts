@@ -27,13 +27,13 @@ $piModel = "llama-cpp/$modelName"
 # server arguments (NO STRING COMMANDS)
 # -----------------------------
 $serverArgs = @(
-    "--model", $modelPath
-    "--port", $port
-    "--ctx-size", "32768"
-    "--gpu-layers", "999"
-    "--temperature", "1.0"
-    "--top-p", "0.95"
-    "--top-k", "64"
+    "--model", $modelPath,
+    "--port", $port,
+    "--ctx-size", "32768",
+    "--gpu-layers", "999",
+    "--temperature", "1.0",
+    "--top-p", "0.95",
+    "--top-k", "64",
     "--chat-template-kwargs", '{"enable_thinking":true}'
 )
 
@@ -47,15 +47,12 @@ while (-not (Test-NetConnection localhost -Port $port).TcpTestSucceeded) {
 pi --model $piModel
 "@
 
-# escape for wt (must be single string-safe)
-$escapedClient = $clientCmd.Replace('"', '\"')
-
 # -----------------------------
 # Windows Terminal layout
 # -----------------------------
 wt --focus --maximized `
     new-tab --title "gemma4-server" --startingDirectory "$cwd" `
-    powershell -NoExit -Command "& llama-server $($serverArgs -join ' ')" `
+    powershell -NoExit -Command "& llama-server @serverArgs" `
     `; `
     split-pane -H --title "pi-client" --startingDirectory "$cwd" `
-    powershell -NoExit -Command "$escapedClient"
+    powershell -NoExit -Command $clientCmd

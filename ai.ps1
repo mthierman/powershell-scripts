@@ -3,7 +3,7 @@ param(
 )
 
 $models = @{
-    gemma4e2b = "C:\Users\mthie\.cache\huggingface\hub\models--unsloth--gemma-4-E2B-it-GGUF\snapshots\f064409f340b34190993560b2168133e5dbae558\gemma-4-E2B-it-Q4_K_M.gguf"
+    gemma4e2b = "D:\models\gemma-4-E2B-it-Q4_K_M.gguf"
     gemma4e4b = "C:\Users\mthie\.lmstudio\models\lmstudio-community\gemma-4-E4B-it-GGUF\gemma-4-E4B-it-Q4_K_M.gguf"
 }
 

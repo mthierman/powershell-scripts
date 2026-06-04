@@ -1,8 +1,7 @@
 rustup update
 deno upgrade
-npm install -g npm@latest
-npm install -g pnpm@latest
-pnpm update -g --latest
+npm update -g
+pnpm update -g
 pymanager install --update
 uv self update
 uv tool upgrade --all
